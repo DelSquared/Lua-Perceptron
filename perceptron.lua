@@ -3,7 +3,7 @@ perceptron = {}
 perceptron.inputNum = 0
 perceptron.outputNum = 0
 perceptron.weights = {}
-perceptron.rate = 0.0001
+perceptron.rate = 0.00001
 perceptron.trainCycles=0
 
 function perceptron.Topology(topologyList)
@@ -88,7 +88,7 @@ function perceptron.Train(inputs,outputs,suppresslog)
   finalError = perceptron.error(perceptron.Eval(inputs),outputs)
   perceptron.trainCycles = perceptron.trainCycles+1
   if suppresslog==nil then
-    print("Starting Error: "..startError..", Ending Error: "..finalError)
+    print("Error: "..finalError)
   elseif suppresslog=="sparse" and perceptron.trainCycles%100000==0 then
     print("Error: "..finalError)
   end
@@ -106,9 +106,13 @@ for i=1,table.getn(outputs) do
   print(outputs[i])
 end
 
-for i=1,1000000 do
-  perceptron.Train({1,0,1},{1,0},"sparse")
+for i=1,1000000000 do
+  perceptron.Train({1,0,1},{0,1},"sparse")
+  if i%100000==0 then
+    perceptron.rate = 0.1*perceptron.rate
+  end
 end
+--It is a known issue that this training "sample" causes the error to increase than stabilise. Reason unknown and investigating.
 
 outputs = perceptron.Eval({1,0,1})
 for i=1,table.getn(outputs) do
