@@ -61,6 +61,19 @@ function perceptron.Eval(inputs,der)
   return outputVals
 end
 
+function perceptron.EvalArgMax(inputs)
+  output = perceptron.Eval(inputs)
+  k=-100000000
+  idx=0
+  for i=1,table.getn(output) do
+    if output[i]>k then
+      k=output[i]
+      idx=i
+    end
+  end
+  return idx
+end
+
 function perceptron.Train(inputs,outputs,suppresslog)
   dt = perceptron.rate
   y=perceptron.Eval(inputs)
@@ -84,8 +97,6 @@ end
 
 -------------------------------------------------------------------
 -------------------------------------------------------------------
-----------------------Testing Section Below------------------------
--------------------------------------------------------------------
 -------------------------------------------------------------------
 
 perceptron.Topology({3,2})
@@ -103,3 +114,5 @@ outputs = perceptron.Eval({1,0,1})
 for i=1,table.getn(outputs) do
   print(outputs[i])
 end
+
+print(perceptron.EvalArgMax({1,0,1}))
